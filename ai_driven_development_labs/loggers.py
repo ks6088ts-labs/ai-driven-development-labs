@@ -1,6 +1,6 @@
 import logging
 
-from template_python.settings import get_project_settings
+from ai_driven_development_labs.settings import get_project_settings
 
 
 def get_logger(

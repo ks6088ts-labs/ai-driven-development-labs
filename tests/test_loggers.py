@@ -1,6 +1,6 @@
 import logging
 
-from template_python.loggers import get_logger
+from ai_driven_development_labs.loggers import get_logger
 
 logger = get_logger(__name__)
 
