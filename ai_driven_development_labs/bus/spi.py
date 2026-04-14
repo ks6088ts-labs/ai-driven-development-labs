@@ -1,6 +1,8 @@
 """SPI bus driver using Linux spidev."""
 
-from ai_driven_development_labs.imu.interfaces import IBusDriver
+from typing import Any
+
+from ai_driven_development_labs.bus.interfaces import IBusDriver
 
 SPI_READ_MASK = 0x80
 
@@ -23,12 +25,12 @@ class SPIBusDriver(IBusDriver):
         self._device = device
         self._max_speed_hz = max_speed_hz
         self._mode = mode
-        self._spi = None
+        self._spi: Any = None
 
     def open(self) -> None:
         """spidev を使用して SPI バスを初期化する。"""
         try:
-            import spidev
+            import spidev  # type: ignore[import-untyped]
         except ImportError as e:
             raise ImportError(
                 "spidev パッケージが見つかりません。"

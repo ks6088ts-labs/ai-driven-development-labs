@@ -5,8 +5,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ai_driven_development_labs.imu.bus.spi import SPI_READ_MASK, SPIBusDriver
-from ai_driven_development_labs.imu.interfaces import IBusDriver
+from ai_driven_development_labs.bus.interfaces import IBusDriver
+from ai_driven_development_labs.bus.spi import SPI_READ_MASK, SPIBusDriver
 
 
 class TestSPIBusDriverInit:

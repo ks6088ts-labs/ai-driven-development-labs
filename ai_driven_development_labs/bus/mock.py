@@ -1,6 +1,6 @@
 """Mock bus driver for hardware-free testing and emulation."""
 
-from ai_driven_development_labs.imu.interfaces import IBusDriver
+from ai_driven_development_labs.bus.interfaces import IBusDriver
 
 _SPI_READ_MASK = 0x80
 

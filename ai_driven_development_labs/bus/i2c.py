@@ -1,6 +1,8 @@
 """I2C bus driver using Linux smbus2."""
 
-from ai_driven_development_labs.imu.interfaces import IBusDriver
+from typing import Any
+
+from ai_driven_development_labs.bus.interfaces import IBusDriver
 
 
 class I2CBusDriver(IBusDriver):
@@ -17,12 +19,12 @@ class I2CBusDriver(IBusDriver):
         """
         self._bus_number = bus
         self._address = address
-        self._smbus = None
+        self._smbus: Any = None
 
     def open(self) -> None:
         """smbus2 を使用して I2C バスを初期化する。"""
         try:
-            import smbus2
+            import smbus2  # type: ignore[import-untyped]
         except ImportError as e:
             raise ImportError(
                 "smbus2 パッケージが見つかりません。"

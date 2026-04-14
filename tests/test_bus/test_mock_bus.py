@@ -2,8 +2,8 @@
 
 import pytest
 
-from ai_driven_development_labs.imu.bus.mock import MockBusDriver
-from ai_driven_development_labs.imu.interfaces import IBusDriver
+from ai_driven_development_labs.bus.interfaces import IBusDriver
+from ai_driven_development_labs.bus.mock import MockBusDriver
 
 
 class TestMockBusDriverInit:
