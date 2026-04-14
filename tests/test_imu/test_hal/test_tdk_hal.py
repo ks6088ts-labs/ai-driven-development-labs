@@ -13,6 +13,7 @@ from ai_driven_development_labs.imu.hal.tdk import (
     _PWR_MGMT0_DEFAULT,
     _REG_ACCEL_CONFIG0,
     _REG_ACCEL_DATA_X1,
+    _REG_BANK_SEL,
     _REG_GYRO_CONFIG0,
     _REG_GYRO_DATA_X1,
     _REG_INT_STATUS,
@@ -71,6 +72,7 @@ class TestTDKSensorHALInit:
         bus = _make_icm42688p_bus()
         hal = TDKSensorHAL()
         hal.initialize(bus)
+        assert bus._registers[_REG_BANK_SEL] == 0x00
         assert bus._registers[_REG_PWR_MGMT0] == _PWR_MGMT0_DEFAULT
         assert bus._registers[_REG_GYRO_CONFIG0] == _GYRO_CONFIG0_DEFAULT
         assert bus._registers[_REG_ACCEL_CONFIG0] == _ACCEL_CONFIG0_DEFAULT
@@ -231,3 +233,12 @@ class TestTDKSensorHALFinalize:
         hal.activate(1, True)
         hal.finalize()
         assert hal._active == {}
+
+    def test_finalize_clears_sampling_period(self):
+        """finalize() 後にサンプリング周期辞書がクリアされることを確認する。"""
+        bus = _make_icm42688p_bus()
+        hal = TDKSensorHAL()
+        hal.initialize(bus)
+        hal.configure(1, 10_000, 0)
+        hal.finalize()
+        assert hal._sampling_period_us == {}

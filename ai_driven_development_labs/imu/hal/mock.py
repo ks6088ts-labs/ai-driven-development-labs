@@ -45,6 +45,7 @@ class MockSensorHAL(ISensorHAL):
         Args:
             bus: 使用するバスドライバ。
         """
+        bus.open()
         self._bus = bus
         self._active = {_ACCEL_HANDLE: False, _GYRO_HANDLE: False}
 
@@ -83,12 +84,12 @@ class MockSensorHAL(ISensorHAL):
         self._active[sensor_handle] = enabled
 
     def configure(self, sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -> None:
-        """サンプリング周期と最大レポート遅延を設定する。
+        """サンプリング周期を設定する。
 
         Args:
             sensor_handle: 対象センサーのハンドル。
             sampling_period_us: サンプリング周期 (μs)。
-            max_report_latency_us: 最大レポート遅延 (μs)。
+            max_report_latency_us: 最大レポート遅延 (μs)。現在の実装では未使用。
         """
         self._sampling_period_us[sensor_handle] = sampling_period_us
 
@@ -138,5 +139,8 @@ class MockSensorHAL(ISensorHAL):
 
     def finalize(self) -> None:
         """HAL を終了しリソースを解放する。"""
-        self._bus = None
+        if self._bus is not None:
+            self._bus.close()
+            self._bus = None
         self._active = {}
+        self._sampling_period_us = {}

@@ -14,6 +14,13 @@ from ai_driven_development_labs.imu.hal.stmicro import (
     _REG_CTRL1_XL,
     _REG_CTRL2_G,
     _REG_CTRL3_C,
+    _REG_CTRL4_C,
+    _REG_CTRL5_C,
+    _REG_CTRL6_C,
+    _REG_CTRL7_G,
+    _REG_CTRL8_XL,
+    _REG_CTRL9_XL,
+    _REG_CTRL10_C,
     _REG_OUT_START,
     _REG_STATUS,
     _REG_WHO_AM_I,
@@ -89,6 +96,13 @@ class TestSTMicroSensorHALInit:
         assert bus._registers[_REG_CTRL1_XL] == _CTRL1_XL_DEFAULT
         assert bus._registers[_REG_CTRL2_G] == _CTRL2_G_DEFAULT
         assert bus._registers[_REG_CTRL3_C] == _CTRL3_C_DEFAULT
+        assert bus._registers[_REG_CTRL4_C] == 0x00
+        assert bus._registers[_REG_CTRL5_C] == 0x00
+        assert bus._registers[_REG_CTRL6_C] == 0x00
+        assert bus._registers[_REG_CTRL7_G] == 0x00
+        assert bus._registers[_REG_CTRL8_XL] == 0x00
+        assert bus._registers[_REG_CTRL9_XL] == 0x00
+        assert bus._registers[_REG_CTRL10_C] == 0x00
 
 
 class TestSTMicroSensorHALSensorList:
@@ -245,3 +259,12 @@ class TestSTMicroSensorHALFinalize:
         hal.activate(1, True)
         hal.finalize()
         assert hal._active == {}
+
+    def test_finalize_clears_sampling_period(self):
+        """finalize() 後にサンプリング周期辞書がクリアされることを確認する。"""
+        bus = _make_lsm6dso_bus()
+        hal = STMicroSensorHAL()
+        hal.initialize(bus)
+        hal.configure(1, 10_000, 0)
+        hal.finalize()
+        assert hal._sampling_period_us == {}

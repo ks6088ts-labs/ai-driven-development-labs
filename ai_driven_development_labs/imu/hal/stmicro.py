@@ -137,12 +137,12 @@ class STMicroSensorHAL(ISensorHAL):
         self._active[sensor_handle] = enabled
 
     def configure(self, sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -> None:
-        """サンプリング周期と最大レポート遅延を設定する。
+        """サンプリング周期を設定する。
 
         Args:
             sensor_handle: 対象センサーのハンドル。
             sampling_period_us: サンプリング周期 (μs)。
-            max_report_latency_us: 最大レポート遅延 (μs)。
+            max_report_latency_us: 最大レポート遅延 (μs)。現在の実装では未使用。
         """
         self._sampling_period_us[sensor_handle] = sampling_period_us
 
@@ -215,3 +215,4 @@ class STMicroSensorHAL(ISensorHAL):
             self._bus.close()
             self._bus = None
         self._active = {}
+        self._sampling_period_us = {}

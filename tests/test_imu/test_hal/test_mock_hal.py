@@ -169,8 +169,19 @@ class TestMockSensorHALFinalize:
         self.hal.finalize()
         assert self.hal._bus is None
 
+    def test_finalize_closes_bus(self):
+        """finalize() 後にバスが閉じられることを確認する。"""
+        self.hal.finalize()
+        assert not self.bus._is_open
+
     def test_finalize_clears_active_sensors(self):
         """finalize() 後にアクティブセンサー辞書がクリアされることを確認する。"""
         self.hal.activate(1, True)
         self.hal.finalize()
         assert self.hal._active == {}
+
+    def test_finalize_clears_sampling_period(self):
+        """finalize() 後にサンプリング周期辞書がクリアされることを確認する。"""
+        self.hal.configure(1, 10_000, 0)
+        self.hal.finalize()
+        assert self.hal._sampling_period_us == {}
