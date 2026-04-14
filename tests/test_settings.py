@@ -2,8 +2,8 @@ from logging import DEBUG
 
 from dotenv import load_dotenv
 
-from template_python.loggers import get_logger
-from template_python.settings import Settings
+from ai_driven_development_labs.loggers import get_logger
+from ai_driven_development_labs.settings import Settings
 
 logger = get_logger(__name__)
 
@@ -19,5 +19,7 @@ def test_settings(caplog):
             verbose=True,
         ), "Failed to load environment variables from .env.template"
         settings = Settings()
-        assert settings.project_name == "template-python", "Default project name should be 'template-python'"
+        assert settings.project_name == "ai-driven-development-labs", (
+            "Default project name should be 'ai-driven-development-labs'"
+        )
         logger.debug(f"Settings initialized: {settings}")

@@ -2299,7 +2299,7 @@ wheels = [
 ]
 
 [[package]]
-name = "template-python"
+name = "ai-driven-development-labs"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [

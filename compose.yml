@@ -1,6 +1,6 @@
 services:
-  template-python:
-    container_name: template-python
+  ai-driven-development-labs:
+    container_name: ai-driven-development-labs
     build:
       context: .
       dockerfile: Dockerfile

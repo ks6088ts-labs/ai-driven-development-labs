@@ -1,9 +1,9 @@
 import logging
 
 import pytest
+from template_python.loggers import get_logger
 
 from template_python.core import hello_world
-from template_python.loggers import get_logger
 
 logger = get_logger(__name__)
 
