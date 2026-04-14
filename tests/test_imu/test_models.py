@@ -123,7 +123,7 @@ class TestSensorInfo:
             sensor_type=SensorType.ACCELEROMETER,
         )
         with pytest.raises(Exception):
-            info.name = "Modified"  # type: ignore[misc]
+            setattr(info, "name", "Modified")
 
 
 class TestSensorEvent:
