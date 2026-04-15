@@ -146,16 +146,12 @@ class TestRead:
 
     def test_read_mock_json_exit_code(self):
         """read --format json が正常終了することを確認する。"""
-        result = runner.invoke(
-            app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--format", "json"]
-        )
+        result = runner.invoke(app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--format", "json"])
         assert result.exit_code == 0
 
     def test_read_mock_table_exit_code(self):
         """read --format table が正常終了することを確認する。"""
-        result = runner.invoke(
-            app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--format", "table"]
-        )
+        result = runner.invoke(app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--format", "table"])
         assert result.exit_code == 0
 
     def test_read_invalid_hal_exits_nonzero(self):
