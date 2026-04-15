@@ -4,46 +4,70 @@
 
 ### レイヤ構造図
 
-```
-┌────────────────────────────────────────────────────────┐
-│                   アプリケーション層                       │
-│              (CLI / テスト / ユーザーコード)               │
-└───────────────────────┬────────────────────────────────┘
-                        │ ISensorHAL
-┌───────────────────────▼────────────────────────────────┐
-│                    センサー HAL 層                        │
-│  ┌──────────────┐  ┌─────────────────┐  ┌───────────┐  │
-│  │ MockSensorHAL│  │STMicroSensorHAL │  │TDKSensor  │  │
-│  │              │  │ (LSM6DSO 等)    │  │HAL        │  │
-│  └──────────────┘  └─────────────────┘  └───────────┘  │
-└───────────────────────┬────────────────────────────────┘
-                        │ IBusDriver
-┌───────────────────────▼────────────────────────────────┐
-│                    バスドライバ層                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │MockBusDriver │  │ I2CBusDriver │  │ SPIBusDriver │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
-└────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    APP["アプリケーション層<br/>(CLI / テスト / ユーザーコード)"]
+
+    subgraph HAL["センサー HAL 層"]
+        MOCK_HAL["MockSensorHAL"]
+        ST_HAL["STMicroSensorHAL<br/>(LSM6DSO 等)"]
+        TDK_HAL["TDKSensorHAL<br/>(ICM-42688-P 等)"]
+    end
+
+    subgraph BUS["バスドライバ層"]
+        MOCK_BUS["MockBusDriver"]
+        I2C_BUS["I2CBusDriver"]
+        SPI_BUS["SPIBusDriver"]
+    end
+
+    APP -->|ISensorHAL| MOCK_HAL
+    APP -->|ISensorHAL| ST_HAL
+    APP -->|ISensorHAL| TDK_HAL
+    MOCK_HAL -->|IBusDriver| MOCK_BUS
+    ST_HAL -->|IBusDriver| I2C_BUS
+    ST_HAL -->|IBusDriver| SPI_BUS
+    TDK_HAL -->|IBusDriver| SPI_BUS
 ```
 
 ### モジュール依存関係
 
-```
-ai_driven_development_labs/
-├── bus/
-│   ├── interfaces.py      # IBusDriver (抽象基底クラス)
-│   ├── mock.py            # MockBusDriver (テスト用仮想バス)
-│   ├── i2c.py             # I2CBusDriver (I2C ペリフェラル)
-│   └── spi.py             # SPIBusDriver (SPI ペリフェラル)
-└── imu/
-    ├── interfaces.py      # ISensorHAL (抽象基底クラス)
-    ├── models.py          # SensorInfo, SensorEvent, SensorType 等
-    ├── factory.py         # create_bus_driver(), create_sensor_hal()
-    ├── cli.py             # CLI エントリーポイント
-    └── hal/
-        ├── mock.py        # MockSensorHAL (テスト用モック)
-        ├── stmicro.py     # STMicroSensorHAL (LSM6DSO / ISM330DHCX)
-        └── tdk.py         # TDKSensorHAL (ICM-42688-P 等)
+```mermaid
+graph LR
+    subgraph imu["imu/"]
+        ISensorHAL["interfaces.py<br/>ISensorHAL"]
+        Models["models.py<br/>SensorInfo / SensorEvent"]
+        Factory["factory.py"]
+        CLI["cli.py"]
+        subgraph hal["hal/"]
+            MockHAL["mock.py<br/>MockSensorHAL"]
+            StHAL["stmicro.py<br/>STMicroSensorHAL"]
+            TdkHAL["tdk.py<br/>TDKSensorHAL"]
+        end
+    end
+
+    subgraph bus["bus/"]
+        IBusDriver["interfaces.py<br/>IBusDriver"]
+        MockBus["mock.py<br/>MockBusDriver"]
+        I2CBus["i2c.py<br/>I2CBusDriver"]
+        SpiBus["spi.py<br/>SPIBusDriver"]
+    end
+
+    MockHAL --> ISensorHAL
+    StHAL --> ISensorHAL
+    TdkHAL --> ISensorHAL
+    MockHAL --> IBusDriver
+    StHAL --> IBusDriver
+    TdkHAL --> IBusDriver
+    MockBus --> IBusDriver
+    I2CBus --> IBusDriver
+    SpiBus --> IBusDriver
+    Factory --> MockHAL
+    Factory --> StHAL
+    Factory --> TdkHAL
+    Factory --> MockBus
+    Factory --> I2CBus
+    Factory --> SpiBus
+    CLI --> Factory
 ```
 
 ### 設計原則
