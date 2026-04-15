@@ -1,20 +1,20 @@
-# IMU HAL 開発者向けドキュメント
+# IMU HAL Developer Documentation
 
-## 1. アーキテクチャ概要
+## 1. Architecture Overview
 
-### レイヤ構造図
+### Layer Structure Diagram
 
 ```mermaid
 graph TD
-    APP["アプリケーション層<br/>(CLI / テスト / ユーザーコード)"]
+    APP["Application Layer<br/>(CLI / Tests / User Code)"]
 
-    subgraph HAL["センサー HAL 層"]
+    subgraph HAL["Sensor HAL Layer"]
         MOCK_HAL["MockSensorHAL"]
-        ST_HAL["STMicroSensorHAL<br/>(LSM6DSO 等)"]
-        TDK_HAL["TDKSensorHAL<br/>(ICM-42688-P 等)"]
+        ST_HAL["STMicroSensorHAL<br/>(LSM6DSO etc.)"]
+        TDK_HAL["TDKSensorHAL<br/>(ICM-42688-P etc.)"]
     end
 
-    subgraph BUS["バスドライバ層"]
+    subgraph BUS["Bus Driver Layer"]
         MOCK_BUS["MockBusDriver"]
         I2C_BUS["I2CBusDriver"]
         SPI_BUS["SPIBusDriver"]
@@ -29,7 +29,7 @@ graph TD
     TDK_HAL -->|IBusDriver| SPI_BUS
 ```
 
-### モジュール依存関係
+### Module Dependency Diagram
 
 ```mermaid
 graph LR
@@ -70,57 +70,57 @@ graph LR
     CLI --> Factory
 ```
 
-### 設計原則
+### Design Principles
 
-本 IMU HAL は [Android Sensors AIDL HAL](https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal) の設計を参考にしており、以下の原則に従っています:
+This IMU HAL is inspired by the [Android Sensors AIDL HAL](https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal) design and follows these principles:
 
-- **依存性逆転の原則 (DIP)**: アプリケーション層は `ISensorHAL` と `IBusDriver` の抽象インターフェースのみに依存する
-- **依存性注入 (DI)**: バスドライバは `initialize(bus)` を通じてセンサー HAL に注入される
-- **テスト容易性**: `MockBusDriver` と `MockSensorHAL` によりハードウェアなしでテスト可能
+- **Dependency Inversion Principle (DIP)**: The application layer depends only on the abstract interfaces `ISensorHAL` and `IBusDriver`
+- **Dependency Injection (DI)**: Bus drivers are injected into Sensor HALs via `initialize(bus)`
+- **Testability**: `MockBusDriver` and `MockSensorHAL` enable testing without hardware
 
 ---
 
-## 2. クイックスタート
+## 2. Quick Start
 
-### 前提条件
+### Prerequisites
 
 ```bash
-# 依存パッケージのインストール
+# Install dependencies
 uv sync
 ```
 
-### MockSensorHAL + CLI による動作確認
+### Verifying with MockSensorHAL + CLI
 
 ```bash
-# センサー一覧の表示 (mock HAL / mock バス)
-uv run imu-hal list-sensors --hal mock --bus mock
+# List sensors (mock HAL / mock bus)
+uv run python -m ai_driven_development_labs.imu.cli list-sensors --hal mock --bus mock
 
-# センサーデータのポーリング (3 回、1 秒間隔)
-uv run imu-hal poll --hal mock --bus mock --count 3 --interval 1.0
+# Read sensor data (3 times, 1 second interval)
+uv run python -m ai_driven_development_labs.imu.cli read --hal mock --bus mock --count 3 --interval 1.0
 
-# JSON 形式で出力
-uv run imu-hal poll --hal mock --bus mock --format json --count 2
+# Read once in JSON format
+uv run python -m ai_driven_development_labs.imu.cli read-once --hal mock --bus mock --format json
 ```
 
-### Python コードからの利用
+### Usage from Python Code
 
 ```python
 from ai_driven_development_labs.bus.mock import MockBusDriver
 from ai_driven_development_labs.imu.hal.mock import MockSensorHAL
 
-# バスドライバとセンサー HAL を生成
+# Create bus driver and sensor HAL
 bus = MockBusDriver()
 hal = MockSensorHAL()
 
-# HAL を初期化 (バスドライバを DI で注入)
+# Initialize HAL (inject bus driver via DI)
 hal.initialize(bus)
 
-# センサー一覧の取得
+# Get sensor list
 sensors = hal.get_sensor_list()
 for sensor in sensors:
     print(f"  {sensor.name} (handle={sensor.sensor_handle})")
 
-# センサーを有効化してデータ取得
+# Activate sensors and read data
 for sensor in sensors:
     hal.activate(sensor.sensor_handle, True)
 
@@ -128,17 +128,17 @@ events = hal.get_events()
 for event in events:
     print(f"  {event.sensor_type.name}: {event.values}")
 
-# リソース解放
+# Release resources
 hal.finalize()
 ```
 
-### STMicro HAL + MockBusDriver による動作確認
+### Verifying with STMicro HAL + MockBusDriver
 
 ```python
 from ai_driven_development_labs.bus.mock import MockBusDriver
 from ai_driven_development_labs.imu.hal.stmicro import STMicroSensorHAL
 
-# LSM6DSO のレジスタマップを模倣
+# Emulate LSM6DSO register map
 register_map = {
     0x0F: 0x6C,  # WHO_AM_I = LSM6DSO
     0x1E: 0x03,  # STATUS_REG: accel + gyro data ready
@@ -153,16 +153,16 @@ hal.finalize()
 
 ---
 
-## 3. 新規ベンダー追加ガイド
+## 3. Adding a New Vendor Guide
 
-`ISensorHAL` を実装して新しい IMU ベンダーを追加する手順を説明します。
+This section explains how to add a new IMU vendor by implementing `ISensorHAL`.
 
-### ステップ 1: HAL クラスの作成
+### Step 1: Create the HAL Class
 
-`ai_driven_development_labs/imu/hal/` に新しいファイルを作成します。例: `bosch.py`
+Create a new file under `ai_driven_development_labs/imu/hal/`. Example: `bosch.py`
 
 ```python
-"""Bosch IMU HAL (BMI270 等) の実装。"""
+"""Bosch IMU HAL (BMI270 etc.) implementation."""
 
 import struct
 import time
@@ -174,17 +174,17 @@ from ai_driven_development_labs.imu.models import ReportingMode, SensorEvent, Se
 _ACCEL_HANDLE = 1
 _GYRO_HANDLE = 2
 
-# レジスタアドレス (BMI270 の例)
+# Register addresses (BMI270 example)
 _REG_CHIP_ID = 0x00   # CHIP_ID
 _REG_STATUS = 0x03    # STATUS
 
-# スケール変換係数 (±2g, ±2000 dps の例)
+# Scale conversion factors (±2g, ±2000 dps example)
 _ACCEL_SENSITIVITY_G_PER_LSB = 1.0 / 16384.0
 _GYRO_SENSITIVITY_DPS_PER_LSB = 1.0 / 16.4
 
 
 class BoschSensorHAL(ISensorHAL):
-    """Bosch 製 IMU (BMI270 等) 用 HAL。"""
+    """HAL for Bosch IMUs (BMI270 etc.)."""
 
     SUPPORTED_DEVICES: dict[int, str] = {
         0x24: "BMI270",
@@ -229,7 +229,7 @@ class BoschSensorHAL(ISensorHAL):
         self._active[sensor_handle] = enabled
 
     def configure(self, sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -> None:
-        pass  # ODR 設定を実装する
+        pass  # Implement ODR configuration
 
     def flush(self, sensor_handle: int) -> None:
         pass
@@ -237,8 +237,8 @@ class BoschSensorHAL(ISensorHAL):
     def get_events(self) -> list[SensorEvent]:
         if self._bus is None:
             return []
-        # STATUS レジスタでデータ準備完了を確認し、出力レジスタを読み出す
-        # ... 実装省略 ...
+        # Check STATUS register for data ready and read output registers
+        # ... implementation omitted ...
         return []
 
     def finalize(self) -> None:
@@ -248,9 +248,9 @@ class BoschSensorHAL(ISensorHAL):
         self._active = {}
 ```
 
-### ステップ 2: factory.py への登録
+### Step 2: Register in factory.py
 
-`ai_driven_development_labs/imu/factory.py` の `create_sensor_hal()` に新しい HAL を追加します:
+Add the new HAL to `create_sensor_hal()` in `ai_driven_development_labs/imu/factory.py`:
 
 ```python
 from ai_driven_development_labs.imu.hal.bosch import BoschSensorHAL
@@ -263,15 +263,15 @@ def create_sensor_hal(hal_type: str) -> ISensorHAL:
             return STMicroSensorHAL()
         case "tdk":
             return TDKSensorHAL()
-        case "bosch":           # 追加
+        case "bosch":           # Added
             return BoschSensorHAL()
         case _:
             raise ValueError(f"Unknown HAL type: {hal_type}")
 ```
 
-### ステップ 3: テストの追加
+### Step 3: Add Tests
 
-`tests/test_imu/test_hal/` に新しいテストファイルを追加します:
+Add a new test file under `tests/test_imu/test_hal/`:
 
 ```python
 # tests/test_imu/test_hal/test_bosch.py
@@ -292,59 +292,59 @@ class TestBoschSensorHAL:
 
 ---
 
-## 4. 新規バスドライバ追加ガイド
+## 4. Adding a New Bus Driver Guide
 
-`IBusDriver` を実装して新しいペリフェラルバスを追加する手順を説明します。
+This section explains how to add a new peripheral bus by implementing `IBusDriver`.
 
-### ステップ 1: バスドライバクラスの作成
+### Step 1: Create the Bus Driver Class
 
-`ai_driven_development_labs/bus/` に新しいファイルを作成します。例: `uart.py`
+Create a new file under `ai_driven_development_labs/bus/`. Example: `uart.py`
 
 ```python
-"""UART バスドライバの実装。"""
+"""UART bus driver implementation."""
 
 from ai_driven_development_labs.bus.interfaces import IBusDriver
 
 
 class UARTBusDriver(IBusDriver):
-    """UART を通じてセンサーと通信するバスドライバ。"""
+    """Bus driver for communicating with sensors via UART."""
 
     def __init__(self, port: str = "/dev/ttyUSB0", baudrate: int = 115200):
         self._port = port
         self._baudrate = baudrate
-        self._serial = None  # pyserial などを利用
+        self._serial = None  # Use pyserial or similar
 
     def open(self) -> None:
-        """UART ポートを開く。"""
+        """Open the UART port."""
         # import serial
         # self._serial = serial.Serial(self._port, self._baudrate)
         ...
 
     def close(self) -> None:
-        """UART ポートを閉じる。"""
+        """Close the UART port."""
         if self._serial is not None:
             # self._serial.close()
             self._serial = None
 
     def read_register(self, register: int, length: int) -> bytes:
-        """レジスタから指定バイト数を読み出す。"""
-        # プロトコルに応じた実装
+        """Read the specified number of bytes from a register."""
+        # Protocol-specific implementation
         ...
         return bytes(length)
 
     def write_register(self, register: int, data: bytes) -> None:
-        """レジスタにデータを書き込む。"""
+        """Write data to a register."""
         ...
 
     def transfer(self, data: bytes) -> bytes:
-        """全二重転送を行う。"""
+        """Perform a full-duplex transfer."""
         ...
         return bytes(len(data))
 ```
 
-### ステップ 2: factory.py への登録
+### Step 2: Register in factory.py
 
-`ai_driven_development_labs/imu/factory.py` の `create_bus_driver()` に追加します:
+Add to `create_bus_driver()` in `ai_driven_development_labs/imu/factory.py`:
 
 ```python
 from ai_driven_development_labs.bus.uart import UARTBusDriver
@@ -357,15 +357,15 @@ def create_bus_driver(bus_type: str, bus_id: int = 0, device: int = 0) -> IBusDr
             return I2CBusDriver(bus_id=bus_id, address=device)
         case "spi":
             return SPIBusDriver(bus=bus_id, device=device)
-        case "uart":            # 追加
+        case "uart":            # Added
             return UARTBusDriver(port=f"/dev/ttyUSB{bus_id}")
         case _:
             raise ValueError(f"Unknown bus type: {bus_type}")
 ```
 
-### ステップ 3: テストの追加
+### Step 3: Add Tests
 
-`IBusDriver` の各メソッドが仕様通りに動作することを確認するテストを追加します:
+Add tests to verify that each `IBusDriver` method works as expected:
 
 ```python
 # tests/test_bus/test_uart_bus.py
@@ -381,112 +381,112 @@ class TestUARTBusDriver:
 
 ---
 
-## 5. API リファレンス
+## 5. API Reference
 
-### `IBusDriver` (抽象基底クラス)
+### `IBusDriver` (Abstract Base Class)
 
-**モジュール**: `ai_driven_development_labs.bus.interfaces`
+**Module**: `ai_driven_development_labs.bus.interfaces`
 
-ペリフェラルバスと通信するための抽象インターフェース。
+Abstract interface for communicating with peripheral buses.
 
-| メソッド | シグネチャ | 説明 |
-|---------|-----------|------|
-| `open` | `() -> None` | バスを初期化して通信を開始する。 |
-| `close` | `() -> None` | バスを閉じてリソースを解放する。 |
-| `read_register` | `(register: int, length: int) -> bytes` | 指定レジスタから `length` バイトを読み出す。 |
-| `write_register` | `(register: int, data: bytes) -> None` | 指定レジスタにデータを書き込む。 |
-| `transfer` | `(data: bytes) -> bytes` | 全二重転送を行い受信データを返す (SPI 用)。 |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `open` | `() -> None` | Initialize the bus and start communication. |
+| `close` | `() -> None` | Close the bus and release resources. |
+| `read_register` | `(register: int, length: int) -> bytes` | Read `length` bytes from the specified register. |
+| `write_register` | `(register: int, data: bytes) -> None` | Write data to the specified register. |
+| `transfer` | `(data: bytes) -> bytes` | Perform a full-duplex transfer and return received data (for SPI). |
 
-### `ISensorHAL` (抽象基底クラス)
+### `ISensorHAL` (Abstract Base Class)
 
-**モジュール**: `ai_driven_development_labs.imu.interfaces`
+**Module**: `ai_driven_development_labs.imu.interfaces`
 
-Android `ISensors.aidl` に準拠したセンサー HAL の抽象インターフェース。
+Abstract sensor HAL interface conforming to Android `ISensors.aidl`.
 
-| メソッド | シグネチャ | 説明 |
-|---------|-----------|------|
-| `initialize` | `(bus: IBusDriver) -> None` | HAL を初期化する。バスドライバを DI で受け取る。 |
-| `get_sensor_list` | `() -> list[SensorInfo]` | 利用可能なセンサー一覧を返す。 |
-| `activate` | `(sensor_handle: int, enabled: bool) -> None` | センサーを有効化/無効化する。 |
-| `configure` | `(sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -> None` | サンプリング周期と最大レポート遅延を設定する。 |
-| `flush` | `(sensor_handle: int) -> None` | FIFO バッファをフラッシュする。 |
-| `get_events` | `() -> list[SensorEvent]` | 最新のセンサーイベントを取得する。 |
-| `finalize` | `() -> None` | HAL を終了しリソースを解放する。 |
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `initialize` | `(bus: IBusDriver) -> None` | Initialize the HAL. Receives the bus driver via DI. |
+| `get_sensor_list` | `() -> list[SensorInfo]` | Return a list of available sensors. |
+| `activate` | `(sensor_handle: int, enabled: bool) -> None` | Enable/disable a sensor. |
+| `configure` | `(sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -> None` | Set the sampling period and maximum report latency. |
+| `flush` | `(sensor_handle: int) -> None` | Flush the FIFO buffer. |
+| `get_events` | `() -> list[SensorEvent]` | Get the latest sensor events. |
+| `finalize` | `() -> None` | Finalize the HAL and release resources. |
 
-### `SensorInfo` (データクラス)
+### `SensorInfo` (Data Class)
 
-**モジュール**: `ai_driven_development_labs.imu.models`
+**Module**: `ai_driven_development_labs.imu.models`
 
-Android `SensorInfo.aidl` に準拠したセンサー情報。`frozen=True` の不変データクラス。
+Sensor information conforming to Android `SensorInfo.aidl`. Immutable data class with `frozen=True`.
 
-| フィールド | 型 | 説明 |
-|-----------|---|------|
-| `sensor_handle` | `int` | センサーを一意に識別するハンドル。 |
-| `name` | `str` | センサーの名前。 |
-| `vendor` | `str` | センサーのベンダー名。 |
-| `sensor_type` | `SensorType` | センサーの種別。 |
-| `version` | `int` | HAL バージョン (デフォルト: 1)。 |
-| `max_range` | `float` | センサーの最大計測範囲。 |
-| `resolution` | `float` | センサーの分解能。 |
-| `power` | `float` | 消費電流 (mA)。 |
-| `min_delay` | `int` | 最小サンプリング周期 (μs)。0 はオンデマンドを意味する。 |
-| `max_delay` | `int` | 最大サンプリング周期 (μs)。 |
-| `fifo_reserved_event_count` | `int` | FIFO に予約されたイベント数。 |
-| `fifo_max_event_count` | `int` | FIFO の最大イベント数。 |
-| `reporting_mode` | `ReportingMode` | レポートモード。 |
+| Field | Type | Description |
+|-------|------|-------------|
+| `sensor_handle` | `int` | Unique handle identifying the sensor. |
+| `name` | `str` | Name of the sensor. |
+| `vendor` | `str` | Vendor name of the sensor. |
+| `sensor_type` | `SensorType` | Type of the sensor. |
+| `version` | `int` | HAL version (default: 1). |
+| `max_range` | `float` | Maximum measurement range of the sensor. |
+| `resolution` | `float` | Resolution of the sensor. |
+| `power` | `float` | Current consumption (mA). |
+| `min_delay` | `int` | Minimum sampling period (μs). 0 means on-demand. |
+| `max_delay` | `int` | Maximum sampling period (μs). |
+| `fifo_reserved_event_count` | `int` | Number of events reserved in the FIFO. |
+| `fifo_max_event_count` | `int` | Maximum number of events in the FIFO. |
+| `reporting_mode` | `ReportingMode` | Reporting mode. |
 
-### `SensorEvent` (データクラス)
+### `SensorEvent` (Data Class)
 
-**モジュール**: `ai_driven_development_labs.imu.models`
+**Module**: `ai_driven_development_labs.imu.models`
 
-Android `Event.aidl` に準拠したセンサーイベント。
+Sensor event conforming to Android `Event.aidl`.
 
-| フィールド | 型 | 説明 |
-|-----------|---|------|
-| `sensor_handle` | `int` | イベントを生成したセンサーのハンドル。 |
-| `sensor_type` | `SensorType` | センサーの種別。 |
-| `timestamp_ns` | `int` | イベントのタイムスタンプ (ナノ秒)。 |
-| `values` | `list[float]` | センサー計測値のリスト (例: [x, y, z])。 |
+| Field | Type | Description |
+|-------|------|-------------|
+| `sensor_handle` | `int` | Handle of the sensor that generated the event. |
+| `sensor_type` | `SensorType` | Type of the sensor. |
+| `timestamp_ns` | `int` | Event timestamp (nanoseconds). |
+| `values` | `list[float]` | List of sensor measurement values (e.g., [x, y, z]). |
 
 ### `SensorType` (IntEnum)
 
-**モジュール**: `ai_driven_development_labs.imu.models`
+**Module**: `ai_driven_development_labs.imu.models`
 
-| 値 | 定数 | 説明 |
-|---|-----|------|
-| 1 | `ACCELEROMETER` | 加速度計 |
-| 4 | `GYROSCOPE` | ジャイロスコープ |
-| 35 | `ACCELEROMETER_UNCALIBRATED` | 未補正加速度計 |
-| 16 | `GYROSCOPE_UNCALIBRATED` | 未補正ジャイロスコープ |
+| Value | Constant | Description |
+|-------|----------|-------------|
+| 1 | `ACCELEROMETER` | Accelerometer |
+| 4 | `GYROSCOPE` | Gyroscope |
+| 35 | `ACCELEROMETER_UNCALIBRATED` | Uncalibrated Accelerometer |
+| 16 | `GYROSCOPE_UNCALIBRATED` | Uncalibrated Gyroscope |
 
 ### `ReportingMode` (IntEnum)
 
-**モジュール**: `ai_driven_development_labs.imu.models`
+**Module**: `ai_driven_development_labs.imu.models`
 
-| 値 | 定数 | 説明 |
-|---|-----|------|
-| 0 | `CONTINUOUS` | 一定周期でデータを報告する。 |
-| 1 | `ON_CHANGE` | 値が変化したときにデータを報告する。 |
-| 2 | `ONE_SHOT` | 一度だけデータを報告する。 |
-| 3 | `SPECIAL_TRIGGER` | 特定のトリガー条件でデータを報告する。 |
+| Value | Constant | Description |
+|-------|----------|-------------|
+| 0 | `CONTINUOUS` | Reports data at a fixed interval. |
+| 1 | `ON_CHANGE` | Reports data when the value changes. |
+| 2 | `ONE_SHOT` | Reports data only once. |
+| 3 | `SPECIAL_TRIGGER` | Reports data under specific trigger conditions. |
 
 ### `MockBusDriver`
 
-**モジュール**: `ai_driven_development_labs.bus.mock`
+**Module**: `ai_driven_development_labs.bus.mock`
 
-メモリ上で仮想レジスタマップを管理するモックバスドライバ。テストやエミュレーション用途。
+A mock bus driver that manages virtual register maps in memory. For testing and emulation purposes.
 
 ```python
 MockBusDriver(register_map: dict[int, int] | None = None)
 ```
 
-- `register_map`: 初期レジスタ値の辞書 `{register_addr: value}`。未登録レジスタは `0x00` を返す。
+- `register_map`: Dictionary of initial register values `{register_addr: value}`. Unregistered registers return `0x00`.
 
 ### `MockSensorHAL`
 
-**モジュール**: `ai_driven_development_labs.imu.hal.mock`
+**Module**: `ai_driven_development_labs.imu.hal.mock`
 
-ハードウェアなしで動作するモック HAL。ランダムまたは固定パターンのセンサーデータを生成する。
+A mock HAL that operates without hardware. Generates random or fixed-pattern sensor data.
 
 ```python
 MockSensorHAL(
@@ -496,32 +496,32 @@ MockSensorHAL(
 )
 ```
 
-- `accel_range`: 加速度計のフルスケール範囲 (g)。
-- `gyro_range`: ジャイロスコープのフルスケール範囲 (dps)。
-- `noise_stddev`: センサーノイズの標準偏差。
+- `accel_range`: Full-scale range of the accelerometer (g).
+- `gyro_range`: Full-scale range of the gyroscope (dps).
+- `noise_stddev`: Standard deviation of sensor noise.
 
 ### `STMicroSensorHAL`
 
-**モジュール**: `ai_driven_development_labs.imu.hal.stmicro`
+**Module**: `ai_driven_development_labs.imu.hal.stmicro`
 
-STMicroelectronics 製 IMU (LSM6DSO / ISM330DHCX 等) 用 HAL。WHO_AM_I レジスタ (0x0F) でデバイスを識別する。
+HAL for STMicroelectronics IMUs (LSM6DSO / ISM330DHCX etc.). Identifies the device using the WHO_AM_I register (0x0F).
 
-対応デバイス:
+Supported devices:
 
-| WHO_AM_I | デバイス名 |
-|---------|----------|
+| WHO_AM_I | Device Name |
+|----------|-------------|
 | 0x6C | LSM6DSO |
 | 0x6B | ISM330DHCX |
 
 ### `TDKSensorHAL`
 
-**モジュール**: `ai_driven_development_labs.imu.hal.tdk`
+**Module**: `ai_driven_development_labs.imu.hal.tdk`
 
-TDK InvenSense 製 IMU (ICM-42688-P 等) 用 HAL。WHO_AM_I レジスタ (0x75) でデバイスを識別する。
+HAL for TDK InvenSense IMUs (ICM-42688-P etc.). Identifies the device using the WHO_AM_I register (0x75).
 
 ---
 
-## 参考資料
+## References
 
-- [Android Sensors AIDL HAL - 検証](https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal?hl=ja#validation)
-- [Android ISensors.aidl](https://source.android.com/docs/core/interaction/sensors?hl=ja)
+- [Android Sensors AIDL HAL - Validation](https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal#validation)
+- [Android ISensors.aidl](https://source.android.com/docs/core/interaction/sensors)
