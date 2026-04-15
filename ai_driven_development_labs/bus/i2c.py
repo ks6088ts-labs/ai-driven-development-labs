@@ -24,7 +24,7 @@ class I2CBusDriver(IBusDriver):
     def open(self) -> None:
         """smbus2 を使用して I2C バスを初期化する。"""
         try:
-            import smbus2  # type: ignore[import-untyped]
+            import smbus2  # type: ignore[import-untyped]  # ty: ignore[unresolved-import]
         except ImportError as e:
             raise ImportError(
                 "smbus2 パッケージが見つかりません。"

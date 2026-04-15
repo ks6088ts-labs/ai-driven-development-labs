@@ -30,7 +30,7 @@ class SPIBusDriver(IBusDriver):
     def open(self) -> None:
         """spidev を使用して SPI バスを初期化する。"""
         try:
-            import spidev  # type: ignore[import-untyped]
+            import spidev  # type: ignore[import-untyped]  # ty: ignore[unresolved-import]
         except ImportError as e:
             raise ImportError(
                 "spidev パッケージが見つかりません。"
