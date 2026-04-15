@@ -500,4 +500,4 @@ TDK InvenSense 製 IMU (ICM-42688-P 等) 用 HAL。WHO_AM_I レジスタ (0x75) 
 ## 参考資料
 
 - [Android Sensors AIDL HAL - 検証](https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal?hl=ja#validation)
-- [Android ISensors.aidl](https://source.android.com/docs/core/interaction/sensors)
+- [Android ISensors.aidl](https://source.android.com/docs/core/interaction/sensors?hl=ja)
