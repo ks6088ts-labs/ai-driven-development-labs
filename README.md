@@ -6,80 +6,11 @@
 
 # ai-driven-development-labs
 
-This is a template repository for Python
+An experimental repository for practicing and validating **AI-Driven Development** workflows.
+It combines an embedded-oriented subject (an IMU sensor HAL implementation) with a local observability stack
+that supports its operation, so the full cycle — design, implementation, testing, documentation, and operations —
+can be iterated on together with AI assistants such as GitHub Copilot.
 
-## Features
-
-- **IMU HAL** — hardware-abstraction layer for IMU sensors (STMicro, TDK InvenSense) with mock support for testing
-- **Local Observability Stack** — one-command (`make obs-up`) OTel Collector → Prometheus → Jaeger → Grafana pipeline; see [docs/observability.md](docs/observability.md)
-
-## Prerequisites
-
-- [Python 3.10+](https://www.python.org/downloads/)
-- [uv](https://docs.astral.sh/uv/getting-started/installation/)
-- [GNU Make](https://www.gnu.org/software/make/)
-
-## Development instructions
-
-### Local development
-
-Use Makefile to run the project locally.
-
-```shell
-# help
-make
-
-# install dependencies for development
-make install-deps-dev
-
-# run tests
-make test
-
-# run CI tests
-make ci-test
-```
-
-### Docker development
-
-```shell
-# build docker image
-make docker-build
-
-# run docker container
-make docker-run
-
-# run CI tests in docker container
-make ci-test-docker
-```
-
-## Deployment instructions
-
-### Docker Hub
-
-To publish the docker image to Docker Hub, you need to [create access token](https://app.docker.com/settings/personal-access-tokens/create) and set the following secrets in the repository settings.
-
-```shell
-gh secret set DOCKERHUB_USERNAME --body $DOCKERHUB_USERNAME
-gh secret set DOCKERHUB_TOKEN --body $DOCKERHUB_TOKEN
-```
-
-### Azure Static Web Apps
-
-```shell
-RESOURCE_GROUP_NAME=your-resource-group-name
-SWA_NAME=your-static-web-app-name
-
-# Create a static app
-az staticwebapp create --name $SWA_NAME --resource-group $RESOURCE_GROUP_NAME
-
-# Retrieve the API key
-AZURE_STATIC_WEB_APPS_API_TOKEN=$(az staticwebapp secrets list --name $SWA_NAME --query "properties.apiKey" -o tsv)
-
-# Set the API key as a GitHub secret
-gh secret set AZURE_STATIC_WEB_APPS_API_TOKEN --body $AZURE_STATIC_WEB_APPS_API_TOKEN
-```
-
-Refer to the following links for more information:
-
-- [Deploying to Azure Static Web App](https://docs.github.com/en/actions/use-cases-and-examples/deploying/deploying-to-azure-static-web-app)
-- [Create a static web app: `az staticwebapp create`](https://learn.microsoft.com/en-us/cli/azure/staticwebapp?view=azure-cli-latest#az-staticwebapp-create)
+Full documentation is published on GitHub Pages:
+**<https://ks6088ts-labs.github.io/ai-driven-development-labs/>**
+(A Japanese version is available via the language switcher on the same site, or under [`docs/`](docs/).)
