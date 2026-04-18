@@ -6,6 +6,7 @@ repo_name: ks6088ts-labs/ai-driven-development-labs
 nav:
   - Home: index.md
   - IMU HAL: imu-hal.md
+  - Observability: observability.md
 theme:
   name: material
   # https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/#automatic-light-dark-mode
