@@ -8,6 +8,11 @@
 
 This is a template repository for Python
 
+## Features
+
+- **IMU HAL** — hardware-abstraction layer for IMU sensors (STMicro, TDK InvenSense) with mock support for testing
+- **Local Observability Stack** — one-command (`make obs-up`) OTel Collector → Prometheus → Jaeger → Grafana pipeline; see [docs/observability.md](docs/observability.md)
+
 ## Prerequisites
 
 - [Python 3.10+](https://www.python.org/downloads/)
