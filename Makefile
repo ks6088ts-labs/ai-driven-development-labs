@@ -110,3 +110,20 @@ docs-serve: ## serve documentation
 
 .PHONY: ci-test-docs
 ci-test-docs: install-deps-docs docs ## run CI test for documentation
+
+# ---
+# Observability
+# ---
+OBS_COMPOSE_FILE ?= compose.observability.yml
+
+.PHONY: obs-up
+obs-up: ## start observability stack (OTel Collector, Prometheus, Jaeger, Grafana)
+	docker compose -f $(OBS_COMPOSE_FILE) up -d
+
+.PHONY: obs-down
+obs-down: ## stop and remove observability stack including volumes
+	docker compose -f $(OBS_COMPOSE_FILE) down -v
+
+.PHONY: obs-logs
+obs-logs: ## follow logs of the observability stack
+	docker compose -f $(OBS_COMPOSE_FILE) logs -f
