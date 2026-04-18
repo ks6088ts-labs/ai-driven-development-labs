@@ -2,12 +2,16 @@
 
 import json
 import time
-from typing import Annotated
+from contextlib import nullcontext
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 
 from ai_driven_development_labs.bus.mock import MockBusDriver
 from ai_driven_development_labs.imu.factory import create_bus_driver, create_sensor_hal
+
+if TYPE_CHECKING:
+    from ai_driven_development_labs.imu.telemetry import ImuTelemetry
 
 app = typer.Typer(help="IMU HAL CLI Tool")
 
@@ -65,8 +69,18 @@ def read_once(
     bus_id: Annotated[int, typer.Option(help=_BUS_ID_HELP)] = 0,
     bus_device: Annotated[int, typer.Option(help=_BUS_DEVICE_HELP)] = 0,
     output_format: Annotated[str, typer.Option("--format", help=_FORMAT_HELP)] = "csv",
+    otel: Annotated[bool, typer.Option("--otel/--no-otel", help="OpenTelemetry計装を有効化")] = False,
 ) -> None:
     """センサーデータを1回だけ読み出し"""
+    tel: ImuTelemetry | None = None
+    if otel:
+        try:
+            from ai_driven_development_labs.imu.telemetry import ImuTelemetry as _ImuTelemetry
+        except ImportError:
+            typer.echo("OpenTelemetry is not installed. Run: uv sync --group otel", err=True)
+            raise typer.Exit(1)
+        tel = _ImuTelemetry()
+
     try:
         bus_driver = create_bus_driver(bus, bus_id, bus_device)
         sensor_hal = create_sensor_hal(hal)
@@ -74,12 +88,23 @@ def read_once(
         typer.echo(str(e), err=True)
         raise typer.Exit(1)
 
-    sensor_hal.initialize(bus_driver)
-    sensors = sensor_hal.get_sensor_list()
-    for s in sensors:
-        sensor_hal.activate(s.sensor_handle, True)
+    with tel.span_imu_read() if tel else nullcontext():
+        with tel.span_hal_initialize() if tel else nullcontext():
+            sensor_hal.initialize(bus_driver)
 
-    events = sensor_hal.get_events()
+        sensors = sensor_hal.get_sensor_list()
+        sensor_info_map = {s.sensor_handle: s for s in sensors}
+
+        for s in sensors:
+            with tel.span_hal_activate(s.sensor_handle) if tel else nullcontext():
+                sensor_hal.activate(s.sensor_handle, True)
+
+        t0 = time.monotonic()
+        events = sensor_hal.get_events()
+        if tel:
+            elapsed_ms = (time.monotonic() - t0) * 1000
+            tel.record_events(events, sensor_info_map)
+            tel.record_read_latency(elapsed_ms)
 
     if output_format == "json":
         output = [
@@ -106,6 +131,8 @@ def read_once(
             typer.echo(line)
 
     sensor_hal.finalize()
+    if tel:
+        tel.shutdown()
 
 
 @app.command("read")
@@ -117,8 +144,18 @@ def read(
     interval: Annotated[float, typer.Option(help="サンプリング間隔 (秒)")] = 1.0,
     count: Annotated[int, typer.Option(help="読み出し回数 (0=無限)")] = 0,
     output_format: Annotated[str, typer.Option("--format", help=_FORMAT_HELP)] = "csv",
+    otel: Annotated[bool, typer.Option("--otel/--no-otel", help="OpenTelemetry計装を有効化")] = False,
 ) -> None:
     """センサーデータを継続的に読み出し"""
+    tel: ImuTelemetry | None = None
+    if otel:
+        try:
+            from ai_driven_development_labs.imu.telemetry import ImuTelemetry as _ImuTelemetry
+        except ImportError:
+            typer.echo("OpenTelemetry is not installed. Run: uv sync --group otel", err=True)
+            raise typer.Exit(1)
+        tel = _ImuTelemetry()
+
     try:
         bus_driver = create_bus_driver(bus, bus_id, bus_device)
         sensor_hal = create_sensor_hal(hal)
@@ -126,10 +163,15 @@ def read(
         typer.echo(str(e), err=True)
         raise typer.Exit(1)
 
-    sensor_hal.initialize(bus_driver)
+    with tel.span_hal_initialize() if tel else nullcontext():
+        sensor_hal.initialize(bus_driver)
+
     sensors = sensor_hal.get_sensor_list()
+    sensor_info_map = {s.sensor_handle: s for s in sensors}
+
     for s in sensors:
-        sensor_hal.activate(s.sensor_handle, True)
+        with tel.span_hal_activate(s.sensor_handle) if tel else nullcontext():
+            sensor_hal.activate(s.sensor_handle, True)
 
     if output_format == "csv":
         typer.echo("timestamp_ns,sensor_handle,sensor_type,x,y,z")
@@ -137,7 +179,13 @@ def read(
     iteration = 0
     try:
         while count == 0 or iteration < count:
-            events = sensor_hal.get_events()
+            with tel.span_imu_read() if tel else nullcontext():
+                t0 = time.monotonic()
+                events = sensor_hal.get_events()
+                if tel:
+                    elapsed_ms = (time.monotonic() - t0) * 1000
+                    tel.record_events(events, sensor_info_map)
+                    tel.record_read_latency(elapsed_ms)
             if output_format == "csv":
                 for line in _format_events_csv(events):
                     typer.echo(line)
@@ -167,6 +215,8 @@ def read(
         pass
     finally:
         sensor_hal.finalize()
+        if tel:
+            tel.shutdown()
 
 
 @app.command("info")
