@@ -74,11 +74,7 @@ class TestImuTelemetryMetrics:
 
         data = reader.get_metrics_data()
         accel_x = next(
-            m
-            for rm in data.resource_metrics
-            for sm in rm.scope_metrics
-            for m in sm.metrics
-            if m.name == "imu.accel.x"
+            m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
         dp = accel_x.data.data_points[0]
         assert dp.value == pytest.approx(1.5)
@@ -99,11 +95,7 @@ class TestImuTelemetryMetrics:
 
         data = reader.get_metrics_data()
         gyro_z = next(
-            m
-            for rm in data.resource_metrics
-            for sm in rm.scope_metrics
-            for m in sm.metrics
-            if m.name == "imu.gyro.z"
+            m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.gyro.z"
         )
         dp = gyro_z.data.data_points[0]
         assert dp.value == pytest.approx(0.3)
@@ -153,11 +145,7 @@ class TestImuTelemetryMetrics:
 
         data = reader.get_metrics_data()
         accel_x = next(
-            m
-            for rm in data.resource_metrics
-            for sm in rm.scope_metrics
-            for m in sm.metrics
-            if m.name == "imu.accel.x"
+            m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
         attrs = accel_x.data.data_points[0].attributes
         assert attrs["sensor_type"] == "ACCELEROMETER"
@@ -180,11 +168,7 @@ class TestImuTelemetryMetrics:
 
         data = reader.get_metrics_data()
         accel_x = next(
-            m
-            for rm in data.resource_metrics
-            for sm in rm.scope_metrics
-            for m in sm.metrics
-            if m.name == "imu.accel.x"
+            m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
         attrs = accel_x.data.data_points[0].attributes
         assert attrs["vendor"] == "AcmeVendor"
@@ -342,9 +326,7 @@ class TestImuTelemetryCliIntegration:
         tel, reader, span_exporter = self._make_patched_telemetry()
         cli_runner = CliRunner()
         with patch("ai_driven_development_labs.imu.telemetry.ImuTelemetry", return_value=tel):
-            result = cli_runner.invoke(
-                app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--otel"]
-            )
+            result = cli_runner.invoke(app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--otel"])
         assert result.exit_code == 0
 
     def test_read_once_with_otel_records_spans(self):
@@ -376,9 +358,7 @@ class TestImuTelemetryCliIntegration:
         tel, reader, _ = self._make_patched_telemetry()
         cli_runner = CliRunner()
         with patch("ai_driven_development_labs.imu.telemetry.ImuTelemetry", return_value=tel):
-            result = cli_runner.invoke(
-                app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--otel"]
-            )
+            result = cli_runner.invoke(app, ["read", "--hal", "mock", "--count", "1", "--interval", "0", "--otel"])
         assert result.exit_code == 0
         data = reader.get_metrics_data()
         assert data is not None
