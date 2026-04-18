@@ -1,7 +1,13 @@
 """Unit tests for ImuTelemetry using in-memory OTel exporters."""
 
+from typing import cast
+
 import pytest
-from opentelemetry.sdk.metrics.export import InMemoryMetricReader
+from opentelemetry.sdk.metrics.export import (
+    HistogramDataPoint,
+    InMemoryMetricReader,
+    NumberDataPoint,
+)
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
 from ai_driven_development_labs.imu.models import SensorEvent, SensorInfo, SensorType
@@ -33,6 +39,7 @@ class TestImuTelemetryMetrics:
         tel.record_events(events)
 
         data = reader.get_metrics_data()
+        assert data is not None
         metric_names = {m.name for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics}
         assert "imu.accel.x" in metric_names
         assert "imu.accel.y" in metric_names
@@ -53,6 +60,7 @@ class TestImuTelemetryMetrics:
         tel.record_events(events)
 
         data = reader.get_metrics_data()
+        assert data is not None
         metric_names = {m.name for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics}
         assert "imu.gyro.x" in metric_names
         assert "imu.gyro.y" in metric_names
@@ -73,10 +81,11 @@ class TestImuTelemetryMetrics:
         tel.record_events(events)
 
         data = reader.get_metrics_data()
+        assert data is not None
         accel_x = next(
             m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
-        dp = accel_x.data.data_points[0]
+        dp = cast(NumberDataPoint, accel_x.data.data_points[0])
         assert dp.value == pytest.approx(1.5)
         tel.shutdown()
 
@@ -94,10 +103,11 @@ class TestImuTelemetryMetrics:
         tel.record_events(events)
 
         data = reader.get_metrics_data()
+        assert data is not None
         gyro_z = next(
             m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.gyro.z"
         )
-        dp = gyro_z.data.data_points[0]
+        dp = cast(NumberDataPoint, gyro_z.data.data_points[0])
         assert dp.value == pytest.approx(0.3)
         tel.shutdown()
 
@@ -107,6 +117,7 @@ class TestImuTelemetryMetrics:
         tel.record_read_latency(12.5)
 
         data = reader.get_metrics_data()
+        assert data is not None
         metric_names = {m.name for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics}
         assert "imu.read.latency" in metric_names
         tel.shutdown()
@@ -118,6 +129,7 @@ class TestImuTelemetryMetrics:
         tel.record_read_latency(20.0)
 
         data = reader.get_metrics_data()
+        assert data is not None
         hist = next(
             m
             for rm in data.resource_metrics
@@ -125,7 +137,7 @@ class TestImuTelemetryMetrics:
             for m in sm.metrics
             if m.name == "imu.read.latency"
         )
-        dp = hist.data.data_points[0]
+        dp = cast(HistogramDataPoint, hist.data.data_points[0])
         assert dp.sum == pytest.approx(30.0)
         assert dp.count == 2
         tel.shutdown()
@@ -144,10 +156,12 @@ class TestImuTelemetryMetrics:
         tel.record_events(events)
 
         data = reader.get_metrics_data()
+        assert data is not None
         accel_x = next(
             m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
         attrs = accel_x.data.data_points[0].attributes
+        assert attrs is not None
         assert attrs["sensor_type"] == "ACCELEROMETER"
         assert attrs["sensor_handle"] == "1"
         tel.shutdown()
@@ -167,10 +181,12 @@ class TestImuTelemetryMetrics:
         tel.record_events(events, sensor_info_by_handle={1: info})
 
         data = reader.get_metrics_data()
+        assert data is not None
         accel_x = next(
             m for rm in data.resource_metrics for sm in rm.scope_metrics for m in sm.metrics if m.name == "imu.accel.x"
         )
         attrs = accel_x.data.data_points[0].attributes
+        assert attrs is not None
         assert attrs["vendor"] == "AcmeVendor"
         tel.shutdown()
 
@@ -233,6 +249,7 @@ class TestImuTelemetrySpans:
             pass
         spans = span_exporter.get_finished_spans()
         activate_span = next(s for s in spans if s.name == "hal.activate")
+        assert activate_span.attributes is not None
         assert activate_span.attributes["sensor_handle"] == 42
         tel.shutdown()
 
@@ -250,6 +267,7 @@ class TestImuTelemetrySpans:
         init_span = next(s for s in spans if s.name == "hal.initialize")
         activate_span = next(s for s in spans if s.name == "hal.activate")
 
+        assert parent_span.context is not None
         assert init_span.parent is not None
         assert init_span.parent.span_id == parent_span.context.span_id
         assert activate_span.parent is not None
@@ -287,6 +305,7 @@ class TestImuTelemetryConfiguration:
         tel = ImuTelemetry(service_name="custom-service", metric_reader=reader, span_exporter=span_exporter)
         tel.record_read_latency(1.0)
         data = reader.get_metrics_data()
+        assert data is not None
         assert data.resource_metrics[0].resource.attributes.get("service.name") == "custom-service"
         tel.shutdown()
 
