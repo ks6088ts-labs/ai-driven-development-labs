@@ -12,7 +12,7 @@ exporters:
   otlp/jaeger:
     endpoint: jaeger:4317
     tls:
-      insecure: true
+      insecure: true # local development only – disable TLS verification inside Docker network
   debug:
     verbosity: basic
 

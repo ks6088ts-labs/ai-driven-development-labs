@@ -50,6 +50,8 @@ services:
     image: grafana/grafana:latest
     container_name: adl-grafana
     environment:
+      # NOTE: anonymous Admin access is intentional for local development only.
+      # Do NOT use these settings in production.
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
     volumes:
