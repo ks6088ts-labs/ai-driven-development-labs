@@ -70,19 +70,19 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_accel_x{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_accel_x_meters_per_s2{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "accel_x (handle={{sensor_handle}})",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_accel_y{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_accel_y_meters_per_s2{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "accel_y (handle={{sensor_handle}})",
           "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_accel_z{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_accel_z_meters_per_s2{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "accel_z (handle={{sensor_handle}})",
           "refId": "C"
         }
@@ -132,19 +132,19 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_gyro_x{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_gyro_x_rad_per_second{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "gyro_x (handle={{sensor_handle}})",
           "refId": "A"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_gyro_y{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_gyro_y_rad_per_second{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "gyro_y (handle={{sensor_handle}})",
           "refId": "B"
         },
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "imu_gyro_z{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
+          "expr": "imu_gyro_z_rad_per_second{sensor_handle=~\"$sensor_handle\",sensor_type=~\"$sensor_type\"}",
           "legendFormat": "gyro_z (handle={{sensor_handle}})",
           "refId": "C"
         }
@@ -189,7 +189,7 @@
       "targets": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-          "expr": "sum(increase(imu_read_latency_bucket[$__rate_interval])) by (le)",
+          "expr": "sum(increase(imu_read_latency_milliseconds_bucket[$__rate_interval])) by (le)",
           "format": "heatmap",
           "legendFormat": "{{le}}",
           "refId": "A"
@@ -200,31 +200,33 @@
     },
     {
       "datasource": { "type": "jaeger", "uid": "${datasource_jaeger}" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "align": "auto", "cellOptions": { "type": "auto" }, "inspect": false },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
       "id": 4,
       "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": false,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false }
       },
       "targets": [
         {
           "datasource": { "type": "jaeger", "uid": "${datasource_jaeger}" },
           "limit": 20,
-          "operationName": "imu.read",
+          "operation": "imu.read",
           "queryType": "search",
           "refId": "A",
           "service": "imu-cli"
         }
       ],
       "title": "Recent IMU Traces (Jaeger)",
-      "type": "traces"
+      "type": "table"
     }
   ],
   "refresh": "10s",
@@ -235,15 +237,16 @@
       {
         "current": {},
         "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-        "definition": "label_values(imu_accel_x, sensor_handle)",
+        "definition": "label_values({__name__=~\"imu_(accel|gyro)_x_.*\"}, sensor_handle)",
         "hide": 0,
         "includeAll": true,
+        "allValue": ".*",
         "label": "Sensor Handle",
         "multi": true,
         "name": "sensor_handle",
         "options": [],
         "query": {
-          "query": "label_values(imu_accel_x, sensor_handle)",
+          "query": "label_values({__name__=~\"imu_(accel|gyro)_x_.*\"}, sensor_handle)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -254,15 +257,16 @@
       {
         "current": {},
         "datasource": { "type": "prometheus", "uid": "${datasource_prometheus}" },
-        "definition": "label_values(imu_accel_x, sensor_type)",
+        "definition": "label_values({__name__=~\"imu_(accel|gyro)_x_.*\"}, sensor_type)",
         "hide": 0,
         "includeAll": true,
+        "allValue": ".*",
         "label": "Sensor Type",
         "multi": true,
         "name": "sensor_type",
         "options": [],
         "query": {
-          "query": "label_values(imu_accel_x, sensor_type)",
+          "query": "label_values({__name__=~\"imu_(accel|gyro)_x_.*\"}, sensor_type)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
