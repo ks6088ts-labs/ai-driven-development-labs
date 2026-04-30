@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/"/>
+    </url>
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/imu-hal/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/imu-hal/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/imu-hal/"/>
+    </url>
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/observability/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/observability/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/observability/"/>
+    </url>
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/"/>
+    </url>
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/imu-hal/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/imu-hal/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/imu-hal/"/>
+    </url>
+    <url>
+        <loc>https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/observability/</loc>
+        <lastmod>2026-04-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/ja/observability/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/observability/"/>
+    </url>
+</urlset>
