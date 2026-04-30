@@ -97,6 +97,11 @@ uv run python -m ai_driven_development_labs.imu.cli read \
 
 初回起動時に **ビューアー** アカウント (`viewer` / `GF_VIEWER_PASSWORD` の値) が自動作成されます。
 
+ログイン後、**IMU Sensor Dashboard** を開くと、加速度計・ジャイロスコープのリアルタイム値、
+IMU 読み取りレイテンシのヒートマップ、Jaeger の最新トレース一覧を確認できます。
+
+![Grafana の IMU Sensor Dashboard](images/grafana-dashboard.png)
+
 ---
 
 ## 3. トラブルシューティング

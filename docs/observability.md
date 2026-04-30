@@ -97,6 +97,11 @@ Navigate to <http://localhost:3000> in your browser and log in:
 
 A **viewer** account (`viewer` / value of `GF_VIEWER_PASSWORD`) is created automatically on first startup.
 
+Once signed in, open the **IMU Sensor Dashboard** to view live accelerometer / gyroscope readings,
+the IMU read-latency heatmap, and the most recent traces from Jaeger:
+
+![IMU Sensor Dashboard in Grafana](images/grafana-dashboard.png)
+
 ---
 
 ## 3. Troubleshooting
