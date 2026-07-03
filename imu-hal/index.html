@@ -1,0 +1,1880 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ks6088ts-labs.github.io/ai-driven-development-labs/imu-hal/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../observability/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+          <link rel="alternate" href="../ja/imu-hal/" hreflang="ja">
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>IMU HAL - ai-driven-development-labs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-0ZTKFXVQ5K"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-0ZTKFXVQ5K",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-0ZTKFXVQ5K",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#imu-hal-developer-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ai-driven-development-labs" class="md-header__button md-logo" aria-label="ai-driven-development-labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ai-driven-development-labs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              IMU HAL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../ja/imu-hal/" hreflang="ja" class="md-select__link">
+              日本語
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ks6088ts-labs/ai-driven-development-labs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ks6088ts-labs/ai-driven-development-labs
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ai-driven-development-labs" class="md-nav__button md-logo" aria-label="ai-driven-development-labs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ai-driven-development-labs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ks6088ts-labs/ai-driven-development-labs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ks6088ts-labs/ai-driven-development-labs
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU HAL
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IMU HAL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layer-structure-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer Structure Diagram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-dependency-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module Dependency Diagram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Principles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Quick Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-with-mocksensorhal-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying with MockSensorHAL + CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-from-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage from Python Code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-with-stmicro-hal-mockbusdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying with STMicro HAL + MockBusDriver
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-adding-a-new-vendor-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Adding a New Vendor Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Adding a New Vendor Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-the-hal-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create the HAL Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-register-in-factorypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Register in factory.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-add-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Add Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-adding-a-new-bus-driver-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Adding a New Bus Driver Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Adding a New Bus Driver Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-the-bus-driver-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create the Bus Driver Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-register-in-factorypy_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Register in factory.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-add-tests_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Add Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ibusdriver-abstract-base-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IBusDriver (Abstract Base Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isensorhal-abstract-base-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ISensorHAL (Abstract Base Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensorinfo-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorInfo (Data Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensorevent-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorEvent (Data Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensortype-intenum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorType (IntEnum)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reportingmode-intenum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReportingMode (IntEnum)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mockbusdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MockBusDriver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mocksensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MockSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stmicrosensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STMicroSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tdksensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TDKSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#layer-structure-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer Structure Diagram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-dependency-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Module Dependency Diagram
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Principles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Quick Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-with-mocksensorhal-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying with MockSensorHAL + CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-from-python-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage from Python Code
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-with-stmicro-hal-mockbusdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verifying with STMicro HAL + MockBusDriver
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-adding-a-new-vendor-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Adding a New Vendor Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Adding a New Vendor Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-the-hal-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create the HAL Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-register-in-factorypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Register in factory.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-add-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Add Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-adding-a-new-bus-driver-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Adding a New Bus Driver Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Adding a New Bus Driver Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-the-bus-driver-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create the Bus Driver Class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-register-in-factorypy_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Register in factory.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-add-tests_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Add Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. API Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. API Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ibusdriver-abstract-base-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IBusDriver (Abstract Base Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isensorhal-abstract-base-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ISensorHAL (Abstract Base Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensorinfo-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorInfo (Data Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensorevent-data-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorEvent (Data Class)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensortype-intenum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SensorType (IntEnum)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reportingmode-intenum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ReportingMode (IntEnum)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mockbusdriver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MockBusDriver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mocksensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MockSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stmicrosensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        STMicroSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tdksensorhal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TDKSensorHAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="imu-hal-developer-documentation">IMU HAL Developer Documentation</h1>
+<h2 id="1-architecture-overview">1. Architecture Overview</h2>
+<h3 id="layer-structure-diagram">Layer Structure Diagram</h3>
+<pre class="mermaid"><code>graph TD
+    APP["Application Layer&lt;br/&gt;(CLI / Tests / User Code)"]
+
+    subgraph HAL["Sensor HAL Layer"]
+        MOCK_HAL["MockSensorHAL"]
+        ST_HAL["STMicroSensorHAL&lt;br/&gt;(LSM6DSO etc.)"]
+        TDK_HAL["TDKSensorHAL&lt;br/&gt;(ICM-42688-P etc.)"]
+    end
+
+    subgraph BUS["Bus Driver Layer"]
+        MOCK_BUS["MockBusDriver"]
+        I2C_BUS["I2CBusDriver"]
+        SPI_BUS["SPIBusDriver"]
+    end
+
+    APP --&gt;|ISensorHAL| MOCK_HAL
+    APP --&gt;|ISensorHAL| ST_HAL
+    APP --&gt;|ISensorHAL| TDK_HAL
+    MOCK_HAL --&gt;|IBusDriver| MOCK_BUS
+    ST_HAL --&gt;|IBusDriver| I2C_BUS
+    ST_HAL --&gt;|IBusDriver| SPI_BUS
+    TDK_HAL --&gt;|IBusDriver| SPI_BUS</code></pre>
+<h3 id="module-dependency-diagram">Module Dependency Diagram</h3>
+<pre class="mermaid"><code>graph LR
+    subgraph imu["imu/"]
+        ISensorHAL["interfaces.py&lt;br/&gt;ISensorHAL"]
+        Models["models.py&lt;br/&gt;SensorInfo / SensorEvent"]
+        Factory["factory.py"]
+        CLI["cli.py"]
+        subgraph hal["hal/"]
+            MockHAL["mock.py&lt;br/&gt;MockSensorHAL"]
+            StHAL["stmicro.py&lt;br/&gt;STMicroSensorHAL"]
+            TdkHAL["tdk.py&lt;br/&gt;TDKSensorHAL"]
+        end
+    end
+
+    subgraph bus["bus/"]
+        IBusDriver["interfaces.py&lt;br/&gt;IBusDriver"]
+        MockBus["mock.py&lt;br/&gt;MockBusDriver"]
+        I2CBus["i2c.py&lt;br/&gt;I2CBusDriver"]
+        SpiBus["spi.py&lt;br/&gt;SPIBusDriver"]
+    end
+
+    MockHAL --&gt; ISensorHAL
+    StHAL --&gt; ISensorHAL
+    TdkHAL --&gt; ISensorHAL
+    MockHAL --&gt; IBusDriver
+    StHAL --&gt; IBusDriver
+    TdkHAL --&gt; IBusDriver
+    MockBus --&gt; IBusDriver
+    I2CBus --&gt; IBusDriver
+    SpiBus --&gt; IBusDriver
+    Factory --&gt; MockHAL
+    Factory --&gt; StHAL
+    Factory --&gt; TdkHAL
+    Factory --&gt; MockBus
+    Factory --&gt; I2CBus
+    Factory --&gt; SpiBus
+    CLI --&gt; Factory</code></pre>
+<h3 id="design-principles">Design Principles</h3>
+<p>This IMU HAL is inspired by the <a href="https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal">Android Sensors AIDL HAL</a> design and follows these principles:</p>
+<ul>
+<li><strong>Dependency Inversion Principle (DIP)</strong>: The application layer depends only on the abstract interfaces <code>ISensorHAL</code> and <code>IBusDriver</code></li>
+<li><strong>Dependency Injection (DI)</strong>: Bus drivers are injected into Sensor HALs via <code>initialize(bus)</code></li>
+<li><strong>Testability</strong>: <code>MockBusDriver</code> and <code>MockSensorHAL</code> enable testing without hardware</li>
+</ul>
+<hr />
+<h2 id="2-quick-start">2. Quick Start</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Install dependencies</span>
+uv<span class="w"> </span>sync
+</code></pre></div>
+<h3 id="verifying-with-mocksensorhal-cli">Verifying with MockSensorHAL + CLI</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># List sensors (mock HAL / mock bus)</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>ai_driven_development_labs.imu.cli<span class="w"> </span>list-sensors<span class="w"> </span>--hal<span class="w"> </span>mock<span class="w"> </span>--bus<span class="w"> </span>mock
+
+<span class="c1"># Read sensor data (3 times, 1 second interval)</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>ai_driven_development_labs.imu.cli<span class="w"> </span><span class="nb">read</span><span class="w"> </span>--hal<span class="w"> </span>mock<span class="w"> </span>--bus<span class="w"> </span>mock<span class="w"> </span>--count<span class="w"> </span><span class="m">3</span><span class="w"> </span>--interval<span class="w"> </span><span class="m">1</span>.0
+
+<span class="c1"># Read once in JSON format</span>
+uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>ai_driven_development_labs.imu.cli<span class="w"> </span>read-once<span class="w"> </span>--hal<span class="w"> </span>mock<span class="w"> </span>--bus<span class="w"> </span>mock<span class="w"> </span>--format<span class="w"> </span>json
+</code></pre></div>
+<h3 id="usage-from-python-code">Usage from Python Code</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBusDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.hal.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockSensorHAL</span>
+
+<span class="c1"># Create bus driver and sensor HAL</span>
+<span class="n">bus</span> <span class="o">=</span> <span class="n">MockBusDriver</span><span class="p">()</span>
+<span class="n">hal</span> <span class="o">=</span> <span class="n">MockSensorHAL</span><span class="p">()</span>
+
+<span class="c1"># Initialize HAL (inject bus driver via DI)</span>
+<span class="n">hal</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">bus</span><span class="p">)</span>
+
+<span class="c1"># Get sensor list</span>
+<span class="n">sensors</span> <span class="o">=</span> <span class="n">hal</span><span class="o">.</span><span class="n">get_sensor_list</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">sensor</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (handle=</span><span class="si">{</span><span class="n">sensor</span><span class="o">.</span><span class="n">sensor_handle</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Activate sensors and read data</span>
+<span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">:</span>
+    <span class="n">hal</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">sensor</span><span class="o">.</span><span class="n">sensor_handle</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">events</span> <span class="o">=</span> <span class="n">hal</span><span class="o">.</span><span class="n">get_events</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">sensor_type</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">values</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Release resources</span>
+<span class="n">hal</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="verifying-with-stmicro-hal-mockbusdriver">Verifying with STMicro HAL + MockBusDriver</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBusDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.hal.stmicro</span><span class="w"> </span><span class="kn">import</span> <span class="n">STMicroSensorHAL</span>
+
+<span class="c1"># Emulate LSM6DSO register map</span>
+<span class="n">register_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mh">0x0F</span><span class="p">:</span> <span class="mh">0x6C</span><span class="p">,</span>  <span class="c1"># WHO_AM_I = LSM6DSO</span>
+    <span class="mh">0x1E</span><span class="p">:</span> <span class="mh">0x03</span><span class="p">,</span>  <span class="c1"># STATUS_REG: accel + gyro data ready</span>
+<span class="p">}</span>
+<span class="n">bus</span> <span class="o">=</span> <span class="n">MockBusDriver</span><span class="p">(</span><span class="n">register_map</span><span class="o">=</span><span class="n">register_map</span><span class="p">)</span>
+<span class="n">hal</span> <span class="o">=</span> <span class="n">STMicroSensorHAL</span><span class="p">()</span>
+<span class="n">hal</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">bus</span><span class="p">)</span>
+
+<span class="n">sensors</span> <span class="o">=</span> <span class="n">hal</span><span class="o">.</span><span class="n">get_sensor_list</span><span class="p">()</span>
+<span class="n">hal</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="3-adding-a-new-vendor-guide">3. Adding a New Vendor Guide</h2>
+<p>This section explains how to add a new IMU vendor by implementing <code>ISensorHAL</code>.</p>
+<h3 id="step-1-create-the-hal-class">Step 1: Create the HAL Class</h3>
+<p>Create a new file under <code>ai_driven_development_labs/imu/hal/</code>. Example: <code>bosch.py</code></p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;Bosch IMU HAL (BMI270 etc.) implementation.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.interfaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">IBusDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.interfaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">ISensorHAL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReportingMode</span><span class="p">,</span> <span class="n">SensorEvent</span><span class="p">,</span> <span class="n">SensorInfo</span><span class="p">,</span> <span class="n">SensorType</span>
+
+<span class="n">_ACCEL_HANDLE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">_GYRO_HANDLE</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c1"># Register addresses (BMI270 example)</span>
+<span class="n">_REG_CHIP_ID</span> <span class="o">=</span> <span class="mh">0x00</span>   <span class="c1"># CHIP_ID</span>
+<span class="n">_REG_STATUS</span> <span class="o">=</span> <span class="mh">0x03</span>    <span class="c1"># STATUS</span>
+
+<span class="c1"># Scale conversion factors (±2g, ±2000 dps example)</span>
+<span class="n">_ACCEL_SENSITIVITY_G_PER_LSB</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">16384.0</span>
+<span class="n">_GYRO_SENSITIVITY_DPS_PER_LSB</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">16.4</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BoschSensorHAL</span><span class="p">(</span><span class="n">ISensorHAL</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HAL for Bosch IMUs (BMI270 etc.).&quot;&quot;&quot;</span>
+
+    <span class="n">SUPPORTED_DEVICES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mh">0x24</span><span class="p">:</span> <span class="s2">&quot;BMI270&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="p">:</span> <span class="n">IBusDriver</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">:</span> <span class="n">IBusDriver</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bus</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="o">=</span> <span class="n">bus</span>
+
+        <span class="n">chip_id</span> <span class="o">=</span> <span class="n">bus</span><span class="o">.</span><span class="n">read_register</span><span class="p">(</span><span class="n">_REG_CHIP_ID</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">chip_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_DEVICES</span><span class="p">:</span>
+            <span class="n">bus</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported device: CHIP_ID=0x</span><span class="si">{</span><span class="n">chip_id</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_device_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED_DEVICES</span><span class="p">[</span><span class="n">chip_id</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="p">{</span><span class="n">_ACCEL_HANDLE</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="n">_GYRO_HANDLE</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sensor_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SensorInfo</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">SensorInfo</span><span class="p">(</span>
+                <span class="n">sensor_handle</span><span class="o">=</span><span class="n">_ACCEL_HANDLE</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_name</span><span class="si">}</span><span class="s2"> Accelerometer&quot;</span><span class="p">,</span>
+                <span class="n">vendor</span><span class="o">=</span><span class="s2">&quot;Bosch&quot;</span><span class="p">,</span>
+                <span class="n">sensor_type</span><span class="o">=</span><span class="n">SensorType</span><span class="o">.</span><span class="n">ACCELEROMETER</span><span class="p">,</span>
+                <span class="n">reporting_mode</span><span class="o">=</span><span class="n">ReportingMode</span><span class="o">.</span><span class="n">CONTINUOUS</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">SensorInfo</span><span class="p">(</span>
+                <span class="n">sensor_handle</span><span class="o">=</span><span class="n">_GYRO_HANDLE</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_device_name</span><span class="si">}</span><span class="s2"> Gyroscope&quot;</span><span class="p">,</span>
+                <span class="n">vendor</span><span class="o">=</span><span class="s2">&quot;Bosch&quot;</span><span class="p">,</span>
+                <span class="n">sensor_type</span><span class="o">=</span><span class="n">SensorType</span><span class="o">.</span><span class="n">GYROSCOPE</span><span class="p">,</span>
+                <span class="n">reporting_mode</span><span class="o">=</span><span class="n">ReportingMode</span><span class="o">.</span><span class="n">CONTINUOUS</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span><span class="p">[</span><span class="n">sensor_handle</span><span class="p">]</span> <span class="o">=</span> <span class="n">enabled</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sampling_period_us</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">max_report_latency_us</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># Implement ODR configuration</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SensorEvent</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="c1"># Check STATUS register for data ready and read output registers</span>
+        <span class="c1"># ... implementation omitted ...</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bus</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="p">{}</span>
+</code></pre></div>
+<h3 id="step-2-register-in-factorypy">Step 2: Register in factory.py</h3>
+<p>Add the new HAL to <code>create_sensor_hal()</code> in <code>ai_driven_development_labs/imu/factory.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.hal.bosch</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoschSensorHAL</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_sensor_hal</span><span class="p">(</span><span class="n">hal_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ISensorHAL</span><span class="p">:</span>
+    <span class="k">match</span> <span class="n">hal_type</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;mock&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MockSensorHAL</span><span class="p">()</span>
+        <span class="k">case</span> <span class="s2">&quot;stmicro&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">STMicroSensorHAL</span><span class="p">()</span>
+        <span class="k">case</span> <span class="s2">&quot;tdk&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TDKSensorHAL</span><span class="p">()</span>
+        <span class="k">case</span> <span class="s2">&quot;bosch&quot;</span><span class="p">:</span>           <span class="c1"># Added</span>
+            <span class="k">return</span> <span class="n">BoschSensorHAL</span><span class="p">()</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown HAL type: </span><span class="si">{</span><span class="n">hal_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="step-3-add-tests">Step 3: Add Tests</h3>
+<p>Add a new test file under <code>tests/test_imu/test_hal/</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># tests/test_imu/test_hal/test_bosch.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">MockBusDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.hal.bosch</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoschSensorHAL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.imu.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SensorType</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBoschSensorHAL</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_initialize_with_supported_device</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bus</span> <span class="o">=</span> <span class="n">MockBusDriver</span><span class="p">(</span><span class="n">register_map</span><span class="o">=</span><span class="p">{</span><span class="mh">0x00</span><span class="p">:</span> <span class="mh">0x24</span><span class="p">})</span>  <span class="c1"># BMI270</span>
+        <span class="n">hal</span> <span class="o">=</span> <span class="n">BoschSensorHAL</span><span class="p">()</span>
+        <span class="n">hal</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">bus</span><span class="p">)</span>
+        <span class="n">sensors</span> <span class="o">=</span> <span class="n">hal</span><span class="o">.</span><span class="n">get_sensor_list</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">sensor_type</span> <span class="o">==</span> <span class="n">SensorType</span><span class="o">.</span><span class="n">ACCELEROMETER</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">)</span>
+        <span class="n">hal</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="4-adding-a-new-bus-driver-guide">4. Adding a New Bus Driver Guide</h2>
+<p>This section explains how to add a new peripheral bus by implementing <code>IBusDriver</code>.</p>
+<h3 id="step-1-create-the-bus-driver-class">Step 1: Create the Bus Driver Class</h3>
+<p>Create a new file under <code>ai_driven_development_labs/bus/</code>. Example: <code>uart.py</code></p>
+<div class="highlight"><pre><span></span><code><span class="sd">&quot;&quot;&quot;UART bus driver implementation.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.interfaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">IBusDriver</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UARTBusDriver</span><span class="p">(</span><span class="n">IBusDriver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bus driver for communicating with sensors via UART.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/dev/ttyUSB0&quot;</span><span class="p">,</span> <span class="n">baudrate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">115200</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_baudrate</span> <span class="o">=</span> <span class="n">baudrate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Use pyserial or similar</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the UART port.&quot;&quot;&quot;</span>
+        <span class="c1"># import serial</span>
+        <span class="c1"># self._serial = serial.Serial(self._port, self._baudrate)</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the UART port.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># self._serial.close()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_serial</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the specified number of bytes from a register.&quot;&quot;&quot;</span>
+        <span class="c1"># Protocol-specific implementation</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">register</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write data to a register.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">transfer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a full-duplex transfer.&quot;&quot;&quot;</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="step-2-register-in-factorypy_1">Step 2: Register in factory.py</h3>
+<p>Add to <code>create_bus_driver()</code> in <code>ai_driven_development_labs/imu/factory.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.uart</span><span class="w"> </span><span class="kn">import</span> <span class="n">UARTBusDriver</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_bus_driver</span><span class="p">(</span><span class="n">bus_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bus_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IBusDriver</span><span class="p">:</span>
+    <span class="k">match</span> <span class="n">bus_type</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;mock&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MockBusDriver</span><span class="p">()</span>
+        <span class="k">case</span> <span class="s2">&quot;i2c&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">I2CBusDriver</span><span class="p">(</span><span class="n">bus_id</span><span class="o">=</span><span class="n">bus_id</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;spi&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">SPIBusDriver</span><span class="p">(</span><span class="n">bus</span><span class="o">=</span><span class="n">bus_id</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;uart&quot;</span><span class="p">:</span>            <span class="c1"># Added</span>
+            <span class="k">return</span> <span class="n">UARTBusDriver</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;/dev/ttyUSB</span><span class="si">{</span><span class="n">bus_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown bus type: </span><span class="si">{</span><span class="n">bus_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="step-3-add-tests_1">Step 3: Add Tests</h3>
+<p>Add tests to verify that each <code>IBusDriver</code> method works as expected:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># tests/test_bus/test_uart_bus.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.uart</span><span class="w"> </span><span class="kn">import</span> <span class="n">UARTBusDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ai_driven_development_labs.bus.interfaces</span><span class="w"> </span><span class="kn">import</span> <span class="n">IBusDriver</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestUARTBusDriver</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_is_instance_of_ibus_driver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bus</span> <span class="o">=</span> <span class="n">UARTBusDriver</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bus</span><span class="p">,</span> <span class="n">IBusDriver</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="5-api-reference">5. API Reference</h2>
+<h3 id="ibusdriver-abstract-base-class"><code>IBusDriver</code> (Abstract Base Class)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.bus.interfaces</code></p>
+<p>Abstract interface for communicating with peripheral buses.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td><code>() -&gt; None</code></td>
+<td>Initialize the bus and start communication.</td>
+</tr>
+<tr>
+<td><code>close</code></td>
+<td><code>() -&gt; None</code></td>
+<td>Close the bus and release resources.</td>
+</tr>
+<tr>
+<td><code>read_register</code></td>
+<td><code>(register: int, length: int) -&gt; bytes</code></td>
+<td>Read <code>length</code> bytes from the specified register.</td>
+</tr>
+<tr>
+<td><code>write_register</code></td>
+<td><code>(register: int, data: bytes) -&gt; None</code></td>
+<td>Write data to the specified register.</td>
+</tr>
+<tr>
+<td><code>transfer</code></td>
+<td><code>(data: bytes) -&gt; bytes</code></td>
+<td>Perform a full-duplex transfer and return received data (for SPI).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="isensorhal-abstract-base-class"><code>ISensorHAL</code> (Abstract Base Class)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.interfaces</code></p>
+<p>Abstract sensor HAL interface conforming to Android <code>ISensors.aidl</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initialize</code></td>
+<td><code>(bus: IBusDriver) -&gt; None</code></td>
+<td>Initialize the HAL. Receives the bus driver via DI.</td>
+</tr>
+<tr>
+<td><code>get_sensor_list</code></td>
+<td><code>() -&gt; list[SensorInfo]</code></td>
+<td>Return a list of available sensors.</td>
+</tr>
+<tr>
+<td><code>activate</code></td>
+<td><code>(sensor_handle: int, enabled: bool) -&gt; None</code></td>
+<td>Enable/disable a sensor.</td>
+</tr>
+<tr>
+<td><code>configure</code></td>
+<td><code>(sensor_handle: int, sampling_period_us: int, max_report_latency_us: int) -&gt; None</code></td>
+<td>Set the sampling period and maximum report latency.</td>
+</tr>
+<tr>
+<td><code>flush</code></td>
+<td><code>(sensor_handle: int) -&gt; None</code></td>
+<td>Flush the FIFO buffer.</td>
+</tr>
+<tr>
+<td><code>get_events</code></td>
+<td><code>() -&gt; list[SensorEvent]</code></td>
+<td>Get the latest sensor events.</td>
+</tr>
+<tr>
+<td><code>finalize</code></td>
+<td><code>() -&gt; None</code></td>
+<td>Finalize the HAL and release resources.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sensorinfo-data-class"><code>SensorInfo</code> (Data Class)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.models</code></p>
+<p>Sensor information conforming to Android <code>SensorInfo.aidl</code>. Immutable data class with <code>frozen=True</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sensor_handle</code></td>
+<td><code>int</code></td>
+<td>Unique handle identifying the sensor.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>Name of the sensor.</td>
+</tr>
+<tr>
+<td><code>vendor</code></td>
+<td><code>str</code></td>
+<td>Vendor name of the sensor.</td>
+</tr>
+<tr>
+<td><code>sensor_type</code></td>
+<td><code>SensorType</code></td>
+<td>Type of the sensor.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>int</code></td>
+<td>HAL version (default: 1).</td>
+</tr>
+<tr>
+<td><code>max_range</code></td>
+<td><code>float</code></td>
+<td>Maximum measurement range of the sensor.</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td><code>float</code></td>
+<td>Resolution of the sensor.</td>
+</tr>
+<tr>
+<td><code>power</code></td>
+<td><code>float</code></td>
+<td>Current consumption (mA).</td>
+</tr>
+<tr>
+<td><code>min_delay</code></td>
+<td><code>int</code></td>
+<td>Minimum sampling period (μs). 0 means on-demand.</td>
+</tr>
+<tr>
+<td><code>max_delay</code></td>
+<td><code>int</code></td>
+<td>Maximum sampling period (μs).</td>
+</tr>
+<tr>
+<td><code>fifo_reserved_event_count</code></td>
+<td><code>int</code></td>
+<td>Number of events reserved in the FIFO.</td>
+</tr>
+<tr>
+<td><code>fifo_max_event_count</code></td>
+<td><code>int</code></td>
+<td>Maximum number of events in the FIFO.</td>
+</tr>
+<tr>
+<td><code>reporting_mode</code></td>
+<td><code>ReportingMode</code></td>
+<td>Reporting mode.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sensorevent-data-class"><code>SensorEvent</code> (Data Class)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.models</code></p>
+<p>Sensor event conforming to Android <code>Event.aidl</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sensor_handle</code></td>
+<td><code>int</code></td>
+<td>Handle of the sensor that generated the event.</td>
+</tr>
+<tr>
+<td><code>sensor_type</code></td>
+<td><code>SensorType</code></td>
+<td>Type of the sensor.</td>
+</tr>
+<tr>
+<td><code>timestamp_ns</code></td>
+<td><code>int</code></td>
+<td>Event timestamp (nanoseconds).</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td><code>list[float]</code></td>
+<td>List of sensor measurement values (e.g., [x, y, z]).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sensortype-intenum"><code>SensorType</code> (IntEnum)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.models</code></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Constant</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>ACCELEROMETER</code></td>
+<td>Accelerometer</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>GYROSCOPE</code></td>
+<td>Gyroscope</td>
+</tr>
+<tr>
+<td>35</td>
+<td><code>ACCELEROMETER_UNCALIBRATED</code></td>
+<td>Uncalibrated Accelerometer</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>GYROSCOPE_UNCALIBRATED</code></td>
+<td>Uncalibrated Gyroscope</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reportingmode-intenum"><code>ReportingMode</code> (IntEnum)</h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.models</code></p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Constant</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><code>CONTINUOUS</code></td>
+<td>Reports data at a fixed interval.</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>ON_CHANGE</code></td>
+<td>Reports data when the value changes.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>ONE_SHOT</code></td>
+<td>Reports data only once.</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>SPECIAL_TRIGGER</code></td>
+<td>Reports data under specific trigger conditions.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mockbusdriver"><code>MockBusDriver</code></h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.bus.mock</code></p>
+<p>A mock bus driver that manages virtual register maps in memory. For testing and emulation purposes.</p>
+<div class="highlight"><pre><span></span><code><span class="n">MockBusDriver</span><span class="p">(</span><span class="n">register_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li><code>register_map</code>: Dictionary of initial register values <code>{register_addr: value}</code>. Unregistered registers return <code>0x00</code>.</li>
+</ul>
+<h3 id="mocksensorhal"><code>MockSensorHAL</code></h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.hal.mock</code></p>
+<p>A mock HAL that operates without hardware. Generates random or fixed-pattern sensor data.</p>
+<div class="highlight"><pre><span></span><code><span class="n">MockSensorHAL</span><span class="p">(</span>
+    <span class="n">accel_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">16.0</span><span class="p">,</span>
+    <span class="n">gyro_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2000.0</span><span class="p">,</span>
+    <span class="n">noise_stddev</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<ul>
+<li><code>accel_range</code>: Full-scale range of the accelerometer (g).</li>
+<li><code>gyro_range</code>: Full-scale range of the gyroscope (dps).</li>
+<li><code>noise_stddev</code>: Standard deviation of sensor noise.</li>
+</ul>
+<h3 id="stmicrosensorhal"><code>STMicroSensorHAL</code></h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.hal.stmicro</code></p>
+<p>HAL for STMicroelectronics IMUs (LSM6DSO / ISM330DHCX etc.). Identifies the device using the WHO_AM_I register (0x0F).</p>
+<p>Supported devices:</p>
+<table>
+<thead>
+<tr>
+<th>WHO_AM_I</th>
+<th>Device Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x6C</td>
+<td>LSM6DSO</td>
+</tr>
+<tr>
+<td>0x6B</td>
+<td>ISM330DHCX</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tdksensorhal"><code>TDKSensorHAL</code></h3>
+<p><strong>Module</strong>: <code>ai_driven_development_labs.imu.hal.tdk</code></p>
+<p>HAL for TDK InvenSense IMUs (ICM-42688-P etc.). Identifies the device using the WHO_AM_I register (0x75).</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://source.android.com/docs/core/interaction/sensors/sensors-aidl-hal#validation">Android Sensors AIDL HAL - Validation</a></li>
+<li><a href="https://source.android.com/docs/core/interaction/sensors">Android ISensors.aidl</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/ks6088ts/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ks6088ts" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://x.com/ks6088ts" target="_blank" rel="noopener" title="x.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M357.2 48h70.6L273.6 224.2 455 464H313L201.7 318.6 74.5 464H3.8l164.9-188.5L-5.2 48h145.6l100.5 132.9zm-24.8 373.8h39.1L119.1 88h-42z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
