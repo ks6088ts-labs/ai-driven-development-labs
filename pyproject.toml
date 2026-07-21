@@ -17,7 +17,7 @@ docs = [
 ]
 otel = [
     "opentelemetry-api>=1.25.0",
-    "opentelemetry-sdk>=1.25.0",
+    "opentelemetry-sdk>=1.44.0",
     "opentelemetry-exporter-otlp>=1.25.0",
 ]
 dev = [
